@@ -20,29 +20,33 @@ html(lang='en')
               li 
                 if user && user.id 
                   a(href='/auth/logout') Google Logout  
-                else 
-                  a(href='/auth/google') Google Login
+                else
+                  li
+                    a 정보수정은 로그인 필요                
+                  li
+                    a(href='/auth/google') Google Login
+                hr
               li
                 a(href='/catalog') Home
               li
-                a(href='/catalog/books') 책
+                a(href='/catalog/books') 책 리스트
               li
-                a(href='/catalog/authors') 작가
+                a(href='/catalog/authors') 작가 리스트
               li
-                a(href='/catalog/genres') 장르
+                a(href='/catalog/genres') 장르 리스트
               li
-                a(href='/catalog/bookinstances') 책객체
+                a(href='/catalog/bookinstances') 책객체 리스트
               li
                 hr
               if user && user.id 
                 li
-                  a(href='/catalog/author/create') 작가생성
+                  a(href='/catalog/author/create') 작가 추가
                 li
-                  a(href='/catalog/genre/create') 장르생성
+                  a(href='/catalog/genre/create') 장르 추가
                 li
-                  a(href='/catalog/book/create') 책생성
+                  a(href='/catalog/book/create') 책 추가
                 li
-                  a(href='/catalog/bookinstance/create') 책객체생성
+                  a(href='/catalog/bookinstance/create') 책객체 추가
         div(class='col-sm-10')
           block content         
 

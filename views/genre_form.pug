@@ -7,7 +7,7 @@ block content
     .form-group 
       label(for='name')  장르: 
       input#name.form-control(type='text', placeholder='판타지, 시, 등등' name='name' value=(undefined===genre ? '' : genre.name))
-    button.btn.btn-primary(type='submit') 생성
+    button.btn.btn-primary(type='submit') 제출
 
   if errors 
     ul 

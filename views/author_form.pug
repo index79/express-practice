@@ -15,7 +15,7 @@ block content
     div.form-group
       label(for='date_of_death') 사망일:
       input#date_of_death.form-control(type='date', name='date_of_death' value=(undefined===author ? '' : author.date_of_death_yyyy_mm_dd) )
-    button.btn.btn-primary(type='submit') 생성
+    button.btn.btn-primary(type='submit') 제출
 
   if errors 
     ul

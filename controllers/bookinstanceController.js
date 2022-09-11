@@ -11,7 +11,7 @@ exports.bookinstance_list = function(req, res, next) {
     .exec(function (err, list_bookinstances) {
       if (err) { return next(err); }
       // Successful.
-      res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances, user: req.user});
+      res.render('bookinstance_list', { title: '책객체 리스트', bookinstance_list: list_bookinstances, user: req.user});
     });
 
 };
