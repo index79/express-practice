@@ -330,25 +330,24 @@ exports.book_update_post = [
   body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
   body("genre.*").escape(),
 
-  // Process request after validation and sanitization.
+  // 정보 확인후 진행.
   (req, res, next) => {
-    // Extract the validation errors from a request.
+    // 에러 추출.
     const errors = validationResult(req);
 
-    // Create a Book object with escaped/trimmed data and old id.
+    // 북 객체 생성.
     const book = new Book({
       title: req.body.title,
       author: req.body.author,
       summary: req.body.summary,
       isbn: req.body.isbn,
       genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
-      _id: req.params.id, //This is required, or a new ID will be assigned!
+      _id: req.params.id, // 아이디를 안 넣어주면 변경되므로 꼭 필요.
     });
 
     if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/error messages.
-
-      // Get all authors and genres for form.
+      // 에러가 확인되면 초기 상태로 복구.
+      // 모든 작가와 장르를 가져옴.
       async.parallel(
         {
           authors(callback) {
@@ -363,8 +362,7 @@ exports.book_update_post = [
             return next(err);
           }
 
-          // Mark our selected genres as checked.
-          for (const genre of results.genres) {
+           for (const genre of results.genres) {
             if (book.genre.includes(genre._id)) {
               genre.checked = "true";
             }
@@ -382,13 +380,13 @@ exports.book_update_post = [
       return;
     }
 
-    // Data from form is valid. Update the record.
+    // 입력정보가 확인되었으므로 업데이트.
     Book.findByIdAndUpdate(req.params.id, book, {}, (err, thebook) => {
       if (err) {
         return next(err);
       }
 
-      // Successful: redirect to book detail page.
+      // Successful.
       res.redirect(thebook.url);
     });
   },

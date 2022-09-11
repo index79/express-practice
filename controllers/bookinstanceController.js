@@ -3,20 +3,20 @@ const { body, validationResult} = require('express-validator');
 const Book = require('../models/book');
 const async = require("async");
 
-// Display list of all BookInstances.
+// BookInstances 리스트 표시
 exports.bookinstance_list = function(req, res, next) {
 
   BookInstance.find()
     .populate('book')
     .exec(function (err, list_bookinstances) {
       if (err) { return next(err); }
-      // Successful, so render
+      // Successful.
       res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances, user: req.user});
     });
 
 };
 
-// Display detail page for a specific BookInstance.
+// BookInstance 의 디테일한 정보 표시.
 exports.bookinstance_detail = (req, res, next) => {
   BookInstance.findById(req.params.id)
     .populate('book')
@@ -29,7 +29,7 @@ exports.bookinstance_detail = (req, res, next) => {
         err.status = 404;
         return next(err);
       }
-      // Successful, so render.
+      // Successful.
       res.render('bookinstance_detail', {
         title: `Copy: ${bookinstance.book.title}`,
         bookinstance,
@@ -38,13 +38,13 @@ exports.bookinstance_detail = (req, res, next) => {
     });
 };
 
-// Display BookInstance create form on GET.
+// BookInstance 객체 생성 on GET.
 exports.bookinstance_create_get = (req, res, next) => {
   Book.find({}, "title").exec((err, books) => {
     if (err) {
       return next(err);
     }
-    // Successful, so render.
+    // Successful
     res.render("bookinstance_form", {
       title: "Create BookInstance",
       book_list: books,
