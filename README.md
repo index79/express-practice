@@ -1,7 +1,7 @@
 # :paperclip: Local Library Project
 > Node.js의 Express를 활용한 도서관 관리 프로젝트입니다.
 
-![메인 화면][(https://user-images.githubusercontent.com/59757689/149616313-dbeace05-67dc-4d70-b6a1-630d601b6455.PNG)](http://ec2-43-200-251-69.ap-northeast-2.compute.amazonaws.com:3000/catalog)
+![홈페이지][(http://ec2-43-200-251-69.ap-northeast-2.compute.amazonaws.com:3000/catalog)
 
 ## 목차
 - [들어가며](#들어가며)
@@ -27,39 +27,34 @@
 ## 들어가며
 ### 1. 프로젝트 소개
 
-프로젝트를 시작하게 된 계기는 웹 프로그래밍의 기본 소양이라 할 수 있는 게시판을 직접 만들어보며 배우고자 시작하게 되었습니다.   
-독학으로 관련 기술들을 학습한 이후 제작한 개인 프로젝트이기 때문에 개인적인 만족감을 가지고 있는 프로젝트입니다.
+Node.js의 Express를 배우기 위하여 시작한 프로젝트입니다. MongoDB를 활용하여 CRUD 기능을 수행하게 제작되었으며, 프론트엔트의 기능은 최소한으로 적용하였습니다.
 
 ### 2. 프로젝트 기능
 
 프로젝트의 주요 기능은 다음과 같습니다.
-- **게시판 -** CRUD 기능, 조회수, 페이징 및 검색 처리
-- **사용자 -** Security 회원가입 및 로그인, OAuth 2.0 구글, 네이버 로그인, 회원정보 수정, 회원가입시 유효성 검사 및 중복 검사
-- **댓글 -** CRUD 기능
+- **로그인 -** OAuth 2.0 구글
+- **도서관 -** CRUD 기능 (책, 작가, 책객체, 장르를 위한 검색/삭제/업데이트)
 
 ### 3. 사용 기술
 
 #### 3-1 백엔드
 
-##### 주요 프레임워크 / 라이브러리
-- Java 11
-- SpringBoot 2.5.6
-- JPA(Spring Data JPA)
-- Spring Security
+##### 주요 모듈
+- Express
+- Express Session
+- Mongoose
+- Morgan
+- Passport
 - OAuth 2.0
-
-##### Build Tool
-- Gradle 7.2
+- Pug
+- Bcrypt
+- Nodemon
 
 ##### DataBase
-- MySQL 8.0.19
+- MongDB
 
 #### 3-2 프론트엔드
-- Html/Css
-- JavaScript
-- Mustache
-- Bootstrap 4.3.1
-
+- Pug
 
 ### 4. 실행 화면
   <details>
