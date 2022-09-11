@@ -56,13 +56,13 @@ exports.bookinstance_create_get = (req, res, next) => {
 // BookInstance 생성 on POST
 exports.bookinstance_create_post = [
   // 입력정보 확인.
-  body("book", "Book must be specified").trim().isLength({ min: 1}).escape(),
-  body("imprint", "Imprint must be specified")
+  body("book", "알림: 책이름이 넣으세요.").trim().isLength({ min: 1}).escape(),
+  body("imprint", "알림: 날인 정보를 넣으세요.")
     .trim()
     .isLength({ min: 1})
     .escape(),
   body("status").escape(),
-  body("due_back", "Invalid date")
+  body("due_back", "알림: 날짜 형식이 잘못되었습니다.")
     .optional({checkFalsy: true})
     .isISO8601()
     .toDate(),
@@ -121,7 +121,7 @@ exports.bookinstance_delete_get = function(req, res, next) {
           res.redirect('/catalog/bookinstances');
       }
       // Successful.
-      res.render('bookinstance_delete', { title: 'Delete BookInstance', bookinstance:  bookinstance, user: req.user
+      res.render('bookinstance_delete', { title: '책객체', bookinstance:  bookinstance, user: req.user
     });
   })
 };

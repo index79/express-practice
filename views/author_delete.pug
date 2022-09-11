@@ -6,11 +6,11 @@ block content
 
   if author_books.length
 
-    p #[strong Delete the following books before attempting to delete this author.]
+    p #[strong 이 작가를 삭제하시려면 아래 책들을 먼저 삭제하여 주세요.]
 
     div(style='margin-left:20px;margin-top:20px')
 
-      h4 Books
+      h4 포함된 책 리스트
 
       dl
       each book in author_books
@@ -19,10 +19,10 @@ block content
         dd #{book.summary}
 
   else
-    p Do you really want to delete this Author?
+    p 이 작가를 삭제하시겠습니까?
 
     form(method='POST' action='')
       div.form-group
         input#authorid.form-control(type='hidden',name='authorid', required='true', value=author._id )
 
-      button.btn.btn-primary(type='submit') Delete
+      button.btn.btn-primary(type='submit') 삭제하기

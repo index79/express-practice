@@ -33,9 +33,9 @@ block content
     else
       p 현재 사용 가능한 책이 없습니다.
 
-    if user && user.id 
-      hr
-      p
-        a(href=book.url+'/delete') 책 삭제.
-      p
-        a(href=book.url+'/update') 책 업데이트.
+  if user && user.id 
+    hr
+    p
+      a(href=book.url+'/delete') 삭제하기
+    p
+      a(href=book.url+'/update') 업데이트하기

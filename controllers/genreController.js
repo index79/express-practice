@@ -99,14 +99,71 @@ exports.genre_create_post = [
   }
 ];
 
-
 // 장르 삭제
-exports.genre_delete_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre delete GET');
+exports.genre_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      genre(callback) {
+        Genre.findById(req.params.id).exec(callback);
+      },
+
+      genre_books(callback) {
+        Book.find( { genre: req.params.id}).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if(results.genre == null){
+        res.redirect('catalog/genres')
+      }
+      // Sucessful.
+      res.render("genre_delete", {
+        title: "Delete Genre",
+        genre: results.genre,
+        genre_books: results.genre_books,
+        user: req.user
+      })
+    }
+  )
 };
 
 exports.genre_delete_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre delete POST');
+  async.parallel(
+    {
+      genre(callback) {
+        Genre.findById(req.body.genreid).exec(callback);
+      },
+      genre_books(callback) {
+        Book.find({ genre: req.body.genreid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.genre_books.length > 0) {
+        // 장르에 책이 있으면 취소.
+        res.render("genre_delete", {
+          title: "Delete Genre",
+          genre: results.genre,
+          genre_books: results.genre_books,
+          user: req.user
+        });
+        return;
+      }
+      // 장르에 책이 없으면 작가를 생성할수 있으므로, 처리후 기본페이지로 redirect.
+      Genre.findByIdAndRemove(req.body.authorid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success
+        res.redirect("/catalog/genres");
+      });
+    }
+  );
 };
 
 exports.genre_update_get = (req, res) => {

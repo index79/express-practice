@@ -2,12 +2,15 @@ extends layout
 
 block content
 
-  h1 Author: #{author.name}
-  p #{author.date_of_birth_formatted} - #{author.date_of_death_formatted}
+  h1 작가이름: #{author.name}
+  if undefined===author.date_of_death || null===author.date_of_death
+    p #{author.date_of_birth_formatted} -
+  else
+    p #{author.date_of_birth_formatted} - #{author.date_of_death_formatted}
 
   div(style='margin-left:20px;margin-top:20px')
 
-    h4 Books
+    h4 책
 
     dl
       each book in author_books
@@ -21,5 +24,5 @@ block content
     if user && user.id 
       hr
       p
-        a(href=author.url+'/delete') 작가 삭제.
+        a(href=author.url+'/delete') 작가 삭제
   

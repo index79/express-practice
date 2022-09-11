@@ -6,11 +6,11 @@ block content
 
   if books_bookinstance.length
 
-    p #[strong Delete the following bookinstances before attempting to delete this book.]
+    p #[strong 작가를 삭제하기 전에 아래 책객체를 먼저 삭제하여 주세요.]
 
     div(style='margin-left:20px;margin-top:20px')
 
-      h4 BookInstances
+      h4 포함된 책객체 리스트
 
       dl
       each bookinstance in books_bookinstance
@@ -19,10 +19,10 @@ block content
         dd #{bookinstance.imprint}
 
   else
-    p Do you really want to delete this Book?
+    p 이 책을 삭제하시겠습니까?
 
     form(method='POST' action='')
       div.form-group
         input#bookid.form-control(type='hidden',name='bookid', required='true', value=book.id )
 
-      button.btn.btn-primary(type='submit') Delete
+      button.btn.btn-primary(type='submit') 삭제하기

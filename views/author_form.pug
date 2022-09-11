@@ -1,25 +1,23 @@
 extends layout
 
-block content 
-  h1=title 
+block content
+  h1=title
 
   form(method='POST' action='')
-    div.form-group 
-      label(for='first_name') 이름: 
-      input#first_name.form-control(type='text' placeholder='이름' 
-      name='first_name' required='true' value=(undefined===author ? '' : author.first_name)) 
-      label(for='family_name') 성: 
-      input#family_name.form-control(type='text' placeholder='성' 
-      name='family_name' required='true' value=(undefined===author ? '' : author.family_name))
-      label(for='date_of_birth') 출생일: 
-      input#date_of_birth.form-control(type='date' placeholder='출생일' 
-      value=(undefined===author ? '' : author.date_of_birth))
-      label(for='date_of_death') 사망일: 
-      input#date_of_death.form-control(type='date' placeholder='사망일' 
-      value=(undefined===author ? '' : author.date_of_death))
+    div.form-group
+      label(for='family_name') 성:
+      input#family_name.form-control(type='text', placeholder='성 (홍)' name='family_name' required='true' value=(undefined===author ? '' : author.family_name))
+      label(for='first_name') 이름:
+      input#first_name.form-control(type='text', placeholder='이름 (길동)' name='first_name' required='true' value=(undefined===author ? '' : author.first_name) )
+    div.form-group
+      label(for='date_of_birth') 출생일:
+      input#date_of_birth.form-control(type='date', name='date_of_birth' value=(undefined===author ? '' : author.date_of_birth_yyyy_mm_dd) )
+    div.form-group
+      label(for='date_of_death') 사망일:
+      input#date_of_death.form-control(type='date', name='date_of_death' value=(undefined===author ? '' : author.date_of_death_yyyy_mm_dd) )
+    button.btn.btn-primary(type='submit') 생성
 
-    button.btn.btn-primary(type='submit') 생성 
   if errors 
-    ul 
-      for error in errors 
-        li!=error.msg
+    ul
+      for error in errors
+        li!= error.msg

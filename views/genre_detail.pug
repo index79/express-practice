@@ -17,3 +17,8 @@ block content
 
       else 
         p 현재 장르의 책이 없습니다.
+
+    if user && user.id 
+      hr
+      p
+        a(href=genre.url+'/delete') 삭제하기

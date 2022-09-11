@@ -19,7 +19,7 @@ block content
       input#due_back.form-control(type='date' name='due_back' value=(undefined===bookinstance ? '' : bookinstance.due_back))
 
     div.form-group
-      label(for='status') Status:
+      label(for='status') 상태:
       select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
         option(value='Maintenance') 관리중
         option(value='Available') 사용가능

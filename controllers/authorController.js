@@ -28,6 +28,7 @@ exports.author_detail = (req, res, next) => {
       },
     },
     (err, results) => {
+      console.log(results.author.date_of_death);
       if (err) {
         // API 에러 표시
         return next(err);
@@ -42,7 +43,7 @@ exports.author_detail = (req, res, next) => {
       res.render("author_detail", {
         title: "Author Detail",
         author: results.author,
-        author_books: results.authors_books,
+        author_books: results.authors_books,        
         user: req.user
       });
     }
@@ -54,28 +55,25 @@ exports.author_create_get = (req, res, next) => {
   res.render("author_form", { title: "작가 생성", user: req.user });
 };
 
+
 // 작가 생성 on POST.
 exports.author_create_post = [
   // 입력정보 확인 및 추출.
   body("first_name")
     .trim()
     .isLength({ min: 1 })
-    .escape()
-    .withMessage("이름을 넣으셔야 합니다."),
-    // .isAlphanumeric()
-    // .withMessage("First name has non-alphanumeric characters."),
+    .escape()    
+    .withMessage("알림: 이름을 넣으세요."),    
   body("family_name")
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("성을 넣으셔야 합니다."),
-    // .isAlphanumeric()
-    // .withMessage("Family name has non-alphanumeric characters."),
-  body("date_of_birth", "Invalid date of birth")
+    .withMessage("알림: 성을 넣으세요."),
+  body("date_of_birth", "알림: 출생 날짜의 형식이 잘못되었습니다.")
     .optional({ checkFalsy: true })
     .isISO8601()
     .toDate(),
-  body("date_of_death", "Invalid date of death")
+  body("date_of_death", "알림: 사망 날짜의 형식이 잘못되었습니다.")
     .optional({ checkFalsy: true })
     .isISO8601()
     .toDate(),
@@ -93,8 +91,7 @@ exports.author_create_post = [
       });
       return;
     }
-    // 입력 정도가 valid.
-
+    // 입력 정도가 valid. 
     // 작가 object 생성 with trimmed data.
     const author = new Author({
       first_name: req.body.first_name,
