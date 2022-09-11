@@ -12,10 +12,10 @@ const BookSchema = new Schema(
   }
 );
 
-// Virtual for book's URL
+// book's URL 스카마
 BookSchema
   .virtual('url')
-  .get(function() { // We don't use an arrow function as we'll need the this object
+  .get(function() { 
     return '/catalog/book/' + this._id;
   });
 

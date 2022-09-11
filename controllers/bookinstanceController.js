@@ -53,9 +53,9 @@ exports.bookinstance_create_get = (req, res, next) => {
   });
 };
 
-// Handle BookInstance create on POST.
+// BookInstance 생성 on POST
 exports.bookinstance_create_post = [
-  // Validate and sanitize fileds.
+  // 입력정보 확인.
   body("book", "Book must be specified").trim().isLength({ min: 1}).escape(),
   body("imprint", "Imprint must be specified")
     .trim()
@@ -67,12 +67,12 @@ exports.bookinstance_create_post = [
     .isISO8601()
     .toDate(),
 
-  // Process request after validation and sanitization
+  // 입력정보 확인 후 진행.
   (req, res, next) => {
-    // Extrace the validation errors from a request.
+    // 에러 확인.
     const errors = validationResult(req);
 
-    // Create a Book Instance object with escaped and trimmed data.
+    // BookInstance 객체 생성
     const bookinstance = new BookInstance({
       book: req.body.book,
       imprint: req.body.imprint,
@@ -81,12 +81,12 @@ exports.bookinstance_create_post = [
     });
 
     if(!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values and error messages.
+      // 에러가 확인 되었으면 원래 폼으로 redirect.
       Book.find({}, "title").exec(function (err, books) {
         if (err) {
           return next(err);
         }
-        // Successful, so render
+        // Successful.
         res.render("bookinstance_form", {
           title: "Create BookInstance",
           book_list: books,
@@ -99,18 +99,18 @@ exports.bookinstance_create_post = [
       return;
     }
 
-    // Data from form is valid.
+    // 입력 정보가 valid 함으로 디비에 저장.
     bookinstance.save((err) => {
       if (err) {
         return next(err);
       }
-      // Successful: redirect to new record;
+      // Successful.
       res.redirect(bookinstance.url);
     });
   }
 ];
 
-// Display BookInstance delete form on GET.
+// BookInstance 객체 삭제 on GET req.
 exports.bookinstance_delete_get = function(req, res, next) {
 
   BookInstance.findById(req.params.id)
@@ -120,27 +120,27 @@ exports.bookinstance_delete_get = function(req, res, next) {
       if (bookinstance==null) { // No results.
           res.redirect('/catalog/bookinstances');
       }
-      // Successful, so render.
+      // Successful.
       res.render('bookinstance_delete', { title: 'Delete BookInstance', bookinstance:  bookinstance, user: req.user
     });
   })
 };
 
-// Handle BookInstance delete on POST.
+// BookInstance 객체 삭제 on POST
 exports.bookinstance_delete_post = function(req, res, next) {
     
-  // Assume valid BookInstance id in field.
+  // BookInstance id 가 valid  한다는 가정하에
   BookInstance.findByIdAndRemove(req.body.id, function deleteBookInstance(err) {
       if (err) { return next(err); }
-      // Success, so redirect to list of BookInstance items.
+      // Success.
       res.redirect('/catalog/bookinstances');
       });
 };
 
-// Display BookInstance update form on GET.
+// BookInstance 업데이트 폼 표시 on GET.
 exports.bookinstance_update_get = function(req, res, next) {
 
-  // Get book, authors and genres for form.
+  // 책, 작가, 장르 기존정보 디비에서 가져오기
   async.parallel({
       bookinstance: function(callback) {
           BookInstance.findById(req.params.id).populate('book').exec(callback)
@@ -168,23 +168,23 @@ exports.bookinstance_update_get = function(req, res, next) {
 
 };
 
-// Handle BookInstance update on POST.
+// BookInstance 업데이트 on POST.
 exports.bookinstance_update_post = [
 
-  // Validate and sanitize fields.
+  // 입력정보 확인
   body('book', 'Book must be specified').trim().isLength({ min: 1 }).escape(),
   body('imprint', 'Imprint must be specified').trim().isLength({ min: 1 }).escape(),
   body('status').escape(),
   body('due_back', 'Invalid date').optional({ checkFalsy: true }).isISO8601().toDate(),
   
   
-  // Process request after validation and sanitization.
+  // 입력 정보 확인 후 진행.
   (req, res, next) => {
 
-      // Extract the validation errors from a request.
+      // 에러 확인.
       const errors = validationResult(req);
 
-      // Create a BookInstance object with escaped/trimmed data and current id.
+      // 현재의 id로 BookInstance 객체 생성
       var bookinstance = new BookInstance(
         { book: req.body.book,
           imprint: req.body.imprint,
@@ -194,21 +194,21 @@ exports.bookinstance_update_post = [
          });
 
       if (!errors.isEmpty()) {
-          // There are errors so render the form again, passing sanitized values and errors.
+          // 에러가 확인되면,
           Book.find({},'title')
               .exec(function (err, books) {
                   if (err) { return next(err); }
-                  // Successful, so render.
+                  // Successful.
                   res.render('bookinstance_form', { title: 'Update BookInstance', book_list : books, selected_book : bookinstance.book._id , errors: errors.array(), bookinstance:bookinstance, user: req.user
                 });
           });
           return;
       }
       else {
-          // Data from form is valid.
+          // 입력데이터가 valid 하면.
           BookInstance.findByIdAndUpdate(req.params.id, bookinstance, {}, function (err,thebookinstance) {
               if (err) { return next(err); }
-                 // Successful - redirect to detail page.
+                 // Successful.
                  res.redirect(thebookinstance.url);
               });
       }
