@@ -11,7 +11,7 @@ const bookinstance = require('../models/bookinstance');
 exports.index = (req, res) =>{
   async.parallel({
     book_count(callback) {
-      Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+      Book.countDocuments({}, callback); 
     },
     book_instance_count(callback) {
       BookInstance.countDocuments({}, callback);
@@ -31,7 +31,7 @@ exports.index = (req, res) =>{
   });
 };
 
-// Display list of all books.
+// 모든 책을 표시.
 exports.book_list = function(req, res, next) {
 
   Book.find({}, 'title author')
@@ -39,16 +39,13 @@ exports.book_list = function(req, res, next) {
     .populate('author')
     .exec(function (err, list_books) {
       if (err) { return next(err); }
-      //Successful, so render
+      //Successful.
       res.render('book_list', { title: 'Book List', book_list: list_books, user: req.user});
     });
 
 };
 
-// Display detail page for a specific book.
-// exports.book_detail = (req, res) => {
-//   res.send(`NOT IMPLEMENTED: Book detail: ${req.params.id}`);
-// };
+// 특정 책의 detail한 정보 표시
 exports.book_detail = (req, res, next) => {
   async.parallel(
     {
@@ -67,12 +64,12 @@ exports.book_detail = (req, res, next) => {
         return next(err);
       }
       if (results.book == null) {
-        // No results.
+        // 결과가 없을때.
         const err = new Error("Book not found");
         err.status = 404;
         return next(err);
       }
-      // Successful, so render.
+      // Successful.
       res.render("book_detail", {
         title: results.book.title,
         book: results.book,
@@ -83,9 +80,9 @@ exports.book_detail = (req, res, next) => {
   );
 };
 
-// Display book create form on GET.
+// 책을 추가할 수 있는 폼 on Get 요청
 exports.book_create_get = (req, res, next) => {
-  // Get all authors and genres, which we can use for adding to our book.
+  // 책을 추가하기 위하여 필요한 작가 및 장르 가져오기.
   async.parallel(
     {
       authors(callback) {
@@ -109,9 +106,9 @@ exports.book_create_get = (req, res, next) => {
   );
 };
 
-// Handle book create on POST.
+// 책을 생성하는 함수 on POST req.
 exports.book_create_post = [
-  // Convert the genre to an array.
+  // 장르를 array로 변환.
   (req, res, next) => {
     if (!Array.isArray(req.body.genre)) {
       req.body.genre =
@@ -120,7 +117,7 @@ exports.book_create_post = [
     next();
   },
 
-  // Validate and sanitize fields.
+  // 입력 확인
   body("title", "Title must not be empty.")
     .trim()
     .isLength({ min: 1 })
@@ -136,12 +133,12 @@ exports.book_create_post = [
   body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
   body("genre.*").escape(),
 
-  // Process request after validation and sanitization.
+  // 입력 확인 후 진행.
   (req, res, next) => {
-    // Extract the validation errors from a request.
+    // 에러확인.
     const errors = validationResult(req);
 
-    // Create a Book object with escaped and trimmed data.
+    // 책 객체 생성
     const book = new Book({
       title: req.body.title,
       author: req.body.author,
@@ -151,9 +148,7 @@ exports.book_create_post = [
     });
 
     if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/error messages.
-
-      // Get all authors and genres for form.
+      // 에러가 있으므로 원래 폼 상태로 복구
       async.parallel(
         {
           authors(callback) {
@@ -168,7 +163,6 @@ exports.book_create_post = [
             return next(err);
           }
 
-          // Mark our selected genres as checked.
           for (const genre of results.genres) {
             if (book.genre.includes(genre._id)) {
               genre.checked = "true";
@@ -186,18 +180,18 @@ exports.book_create_post = [
       return;
     }
 
-    // Data from form is valid. Save book.
+    // 책 객체 디비에 저장.
     book.save((err) => {
       if (err) {
         return next(err);
       }
-      // Successful: redirect to new book record.
+      // Successful:
       res.redirect(book.url);
     });
   },
 ];
 
-// Display book delete form on GET.
+// 책 삭제 요청 페이지 표시
 exports.book_delete_get = (req, res, next) => {
   async.parallel(
     {
@@ -217,7 +211,7 @@ exports.book_delete_get = (req, res, next) => {
         res.redirect("/catalog/books")
       }
      
-      // Successful, so render
+      // Successful.
       res.render("book_delete", {
         title: 'Delete Book',
         book: results.book,
@@ -228,7 +222,7 @@ exports.book_delete_get = (req, res, next) => {
   );
 };
 
-// Handle book delete on POST.
+// 책 삭제 함수 on POST.
 exports.book_delete_post = (req, res, next) => {    
   async.parallel(
     {
@@ -263,9 +257,9 @@ exports.book_delete_post = (req, res, next) => {
   );
 };
 
-// Display book update form on GET.
+// 책 정보 업데이트 표시 on GET.
 exports.book_update_get = (req, res, next) => {
-  // Get book, authors and genres for form.
+  // 책, 작가, 장르 폼 가져오기.
   async.parallel(
     {
       book(callback) {
@@ -291,8 +285,7 @@ exports.book_update_get = (req, res, next) => {
         err.status = 404;
         return next(err);
       }
-      // Success.
-      // Mark our selected genres as checked.
+      // Success.   
       for (const genre of results.genres) {
         for (const bookGenre of results.book.genre) {
           if (genre._id.toString() === bookGenre._id.toString()) {
@@ -311,9 +304,9 @@ exports.book_update_get = (req, res, next) => {
   );
 };
 
-// Handle book update on POST.
+// 책 정보 업데이트 함수 on POST.
 exports.book_update_post = [
-  // Convert the genre to an array
+  // 장르를 array 로 변환.
   (req, res, next) => {
     if (!Array.isArray(req.body.genre)) {
       req.body.genre = typeof req.body.genre === "undefined" ? [] : [req.body.genre];
@@ -321,7 +314,7 @@ exports.book_update_post = [
     next();
   },
 
-  // Validate and sanitize fields.
+  // 입력 정보 확인.
   body("title", "Title must not be empty.")
     .trim()
     .isLength({ min: 1 })

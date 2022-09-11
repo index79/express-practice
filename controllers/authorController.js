@@ -3,7 +3,7 @@ const async = require("async");
 const Book = require("../models/book");
 const { body, validationResult} = require("express-validator");
 
-// Display list of all Authors.
+// 작가 리스트 표시
 exports.author_list = function(req, res, next) {
 
   Author.find()
@@ -15,9 +15,7 @@ exports.author_list = function(req, res, next) {
     });    
 };
 
-// Display detail page for a specific Author.
-// exports.author_detail = (req, res) => {
-//   res.send(`NOT IMPLEMENTED: Author detail: ${req.params.id}`);
+// 작가 정보 표시
 // };
 exports.author_detail = (req, res, next) => {
   async.parallel(
@@ -31,11 +29,11 @@ exports.author_detail = (req, res, next) => {
     },
     (err, results) => {
       if (err) {
-        // Error in API usage.
+        // API 에러 표시
         return next(err);
       }
       if (results.author == null) {
-        // No results.
+        // 쿼리 내용 없을때
         const err = new Error("Author not found");
         err.status = 404;
         return next(err);
@@ -51,14 +49,14 @@ exports.author_detail = (req, res, next) => {
   );
 };
 
-// Display Author create form on GET.
+// 작가 생성 폼 표시.
 exports.author_create_get = (req, res, next) => {
   res.render("author_form", { title: "Create Author", user: req.user });
 };
 
-// Handle Author create on POST.
+// 작가 생성 on POST.
 exports.author_create_post = [
-  // Validate and sanitize fields.
+  // 입력정보 확인 및 추출.
   body("first_name")
     .trim()
     .isLength({ min: 1 })
@@ -81,13 +79,13 @@ exports.author_create_post = [
     .optional({ checkFalsy: true })
     .isISO8601()
     .toDate(),
-  // Process request after validation and sanitization.
+  // 입력정보 확인 및 추출 후 실행.
   (req, res, next) => {
-    // Extract the validation errors from a request.
+    // 입력 정보 에러 추출
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/errors messages.
+      // 에러가 확인되면 기본값/에러 표시
       res.render("author_form", {
         title: "Create Author",
         author: req.body,
@@ -95,9 +93,9 @@ exports.author_create_post = [
       });
       return;
     }
-    // Data from form is valid.
+    // 입력 정도가 valid.
 
-    // Create an Author object with escaped and trimmed data.
+    // 작가 object 생성 with trimmed data.
     const author = new Author({
       first_name: req.body.first_name,
       family_name: req.body.family_name,
@@ -108,13 +106,13 @@ exports.author_create_post = [
       if (err) {
         return next(err);
       }
-      // Successful - redirect to new author record.
+      // Successful - 작가 리스트 페이로 redirect.
       res.redirect(author.url);
     });
   },
 ];
 
-// Display Author delete form on GET.
+// 작가 삭제 폼 표시 on Get.
 exports.author_delete_get = (req, res, next) => {
   async.parallel(
     {
@@ -130,10 +128,10 @@ exports.author_delete_get = (req, res, next) => {
         return next(err);
       }
       if(results.author == null) {
-        // No results
+        // 결과 없으면.
         res.redirect("/catalog/authors");      
       }
-      // Successful, so render.
+      // Successful. 
       res.render("author_delete", {
         title: "Delete Author",
         author: results.author,
@@ -144,7 +142,7 @@ exports.author_delete_get = (req, res, next) => {
   );
 };
 
-// Handle Author delete on POST.
+// 작가 삭제를 위한 함수
 exports.author_delete_post = (req, res, next) => {
   async.parallel(
     {
@@ -161,7 +159,7 @@ exports.author_delete_post = (req, res, next) => {
       }
       // Success
       if (results.authors_books.length > 0) {
-        // Author has books. Render in same way as for GET route.
+        // 작가의 책이 있으면, 취소되고 author_delete Get 호출
         res.render("author_delete", {
           title: "Delete Author",
           author: results.author,
@@ -170,24 +168,75 @@ exports.author_delete_post = (req, res, next) => {
         });
         return;
       }
-      // Author has no books. Delete object and redirect to the list of authors.
+      // 작가에게 책이 없으면 작가를 생성할수 있으므로, 처리후 기본페이지로 redirect.
       Author.findByIdAndRemove(req.body.authorid, (err) => {
         if (err) {
           return next(err);
         }
-        // Success - go to author list
+        // Success - 작가 리스트로 리다이렉트
         res.redirect("/catalog/authors");
       });
     }
   );
 };
 
-// Display Author update form on GET.
-exports.author_update_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author update GET');
+// 작가 정보를 수정할수 있는 폼 표시.
+exports.author_update_get = function (req, res, next) {
+
+  Author.findById(req.params.id, function (err, author) {
+      if (err) { return next(err); }
+      if (author == null) { // No results.
+          var err = new Error('Author not found');
+          err.status = 404;
+          return next(err);
+      }
+      // Success.
+      res.render('author_form', { title: 'Update Author', author: author });
+
+  });
 };
 
-// Handle Author update on POST.
-exports.author_update_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author update POST');
-};
+// 작가 정보를 수정하는 함수 on Post.
+exports.author_update_post = [
+
+  // 입력 정보 확인 및 알맞은 정보로 추출
+  body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
+      .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+  body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
+      .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+  body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
+  body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
+
+
+  // 입력 정보 확인 및 알맞은 정보로 추출 후 진행
+  (req, res, next) => {
+
+      // 에러 표시가 있으면 추출
+      const errors = validationResult(req);
+
+      // 작가 생성
+      var author = new Author(
+          {
+              first_name: req.body.first_name,
+              family_name: req.body.family_name,
+              date_of_birth: req.body.date_of_birth,
+              date_of_death: req.body.date_of_death,
+              _id: req.params.id
+          }
+      );
+
+      if (!errors.isEmpty()) {
+          // 에러가 있으면 초기 페이지로 redirect 및 에러 표시 
+          res.render('author_form', { title: 'Update Author', author: author, errors: errors.array(), user: req.user });
+          return;
+      }
+      else {
+          // 정보가 valid 하면, 자료 수정.
+          Author.findByIdAndUpdate(req.params.id, author, {}, function (err, theauthor) {
+              if (err) { return next(err); }
+              // Successful - 초기 화면으로 redirect
+              res.redirect(theauthor.url);
+          });
+      }
+  }
+];
