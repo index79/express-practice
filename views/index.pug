@@ -1,18 +1,18 @@
 extends layout
 block content  
   h1= title
-  p Welcome to #[em LocalLibrary], a very basic Express website developed as a tutorial example on the Mozilla Developer Network.
+  p #[em LocalLibrary]에 오신걸 환영합니다..
 
-  h1 Dynamic content
+  h1 아이템
 
   if error
-    p Error getting dynamic content.
+    p 에러
   else
-    p The library has the following record counts:
+    p 아래와 같은 레코드가 검색됨:
 
     ul
-      li #[strong Books:] !{data.book_count}
-      li #[strong Copies:] !{data.book_instance_count}
-      li #[strong Copies available:] !{data.book_instance_available_count}
-      li #[strong Authors:] !{data.author_count}
-      li #[strong Genres:] !{data.genre_count}
+      li #[strong 책:] !{data.book_count}
+      li #[strong 카피:] !{data.book_instance_count}
+      li #[strong 사용가능한 카피:] !{data.book_instance_available_count}
+      li #[strong 작가:] !{data.author_count}
+      li #[strong 장르:] !{data.genre_count}

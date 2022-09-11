@@ -16,10 +16,10 @@ block content
         dd #{book.summary}
 
       else
-        p This author has no books.
+        p 현재 이 작가의 책은 없습니다.
 
     if user && user.id 
       hr
       p
-        a(href=author.url+'/delete') Delete author
+        a(href=author.url+'/delete') 작가 삭제.
   

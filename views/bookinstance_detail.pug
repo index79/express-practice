@@ -2,26 +2,26 @@ extends layout
 
 block content
 
-  h1 ID: #{bookinstance._id}
+  h1 아이디: #{bookinstance._id}
 
-  p #[strong Title:]
+  p #[strong 타이틀:]
     a(href=bookinstance.book.url) #{bookinstance.book.title}
-  p #[strong Imprint:] #{bookinstance.imprint}
+  p #[strong 날인:] #{bookinstance.imprint}
 
-  p #[strong Status:]
+  p #[strong 상태:]
     if bookinstance.status=='Available'
-      span.text-success #{bookinstance.status}
+      span.text-success 사용가능
     else if bookinstance.status=='Maintenance'
-      span.text-danger #{bookinstance.status}
+      span.text-danger 작업중
     else
-      span.text-warning #{bookinstance.status}
+      span.text-warning 사용중
 
   if bookinstance.status!='Available'
-    p #[strong Due back:] #{bookinstance.due_back_formatted}
+    p #[strong 반납일:] #{bookinstance.due_back_formatted}
   
   if user && user.id 
     hr
     p
-      a(href=bookinstance.url+'/delete') Delete Bookinstance
+      a(href=bookinstance.url+'/delete') 책 객체 삭제
     p
-      a(href=bookinstance.url+'/update') Update Bookinstance
+      a(href=bookinstance.url+'/update') 책 객제 업데이트

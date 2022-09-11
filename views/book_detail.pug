@@ -1,41 +1,41 @@
 extends layout
 
 block content
-  h1 Title: #{book.title}
+  h1 타이틀: #{book.title}
 
-  p #[strong Author:]
+  p #[strong 작가:]
     a(href=book.author.url) #{book.author.name}
-  p #[strong Summary:] #{book.summary}
+  p #[strong 요약:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
-  p #[strong Genre:]
+  p #[strong 장르:]
     each val, index in book.genre
       a(href=val.url) #{val.name}
       if index < book.genre.length - 1
         |,
 
   div(style='margin-left:20px;margin-top:20px')
-    h4 Copies
+    h4 책 객체 리스트
 
     each val in book_instances
       hr
       if val.status=='Available'
-        p.text-success #{val.status}
+        p.text-success 사용가능
       else if val.status=='Maintenance'
-        p.text-danger #{val.status}
+        p.text-danger 관리중
       else
-        p.text-warning #{val.status}
-      p #[strong Imprint:] #{val.imprint}
+        p.text-warning 사용중
+      p #[strong 날인:] #{val.imprint}
       if val.status!='Available'
-        p #[strong Due back:] #{val.due_back}
-      p #[strong Id:]
+        p #[strong 반납일:] #{val.due_back}
+      p #[strong 아이디:]
         a(href=val.url) #{val._id}
 
     else
-      p There are no copies of this book in the library.
+      p 현재 사용 가능한 책이 없습니다.
 
     if user && user.id 
       hr
       p
-        a(href=book.url+'/delete') Delete Book
+        a(href=book.url+'/delete') 책 삭제.
       p
-        a(href=book.url+'/update') Update Book
+        a(href=book.url+'/update') 책 업데이트.

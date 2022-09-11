@@ -11,7 +11,7 @@ exports.genre_list = function (req, res, next) {
     .exec(function (err, list_genres){
       if(err) { return next(err);}
       //Successful.     
-      res.render('genre_list', { title: 'Genre List', genre_list: list_genres, user: req.user});
+      res.render('genre_list', { title: '장르 리스트', genre_list: list_genres, user: req.user});
     });
 };
 
@@ -50,7 +50,7 @@ exports.genre_detail = (req, res, next) => {
 
 // 장르 생성 폼 표시 on GET.
 exports.genre_create_get = (req, res, next) => {
-  res.render("genre_form", { title: "Create Genre", user: req.user});
+  res.render("genre_form", { title: "장르 생성", user: req.user});
 }
 
 // 장르 생성 on POST.

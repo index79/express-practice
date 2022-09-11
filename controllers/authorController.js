@@ -11,7 +11,7 @@ exports.author_list = function(req, res, next) {
     .exec(function (err, list_authors) {
       if (err) { return next(err);}
       // Successful, so render
-      res.render('author_list', { title: 'Author List', author_list: list_authors, user: req.user});
+      res.render('author_list', { title: '작가 리스트', author_list: list_authors, user: req.user});
     });    
 };
 
@@ -51,7 +51,7 @@ exports.author_detail = (req, res, next) => {
 
 // 작가 생성 폼 표시.
 exports.author_create_get = (req, res, next) => {
-  res.render("author_form", { title: "Create Author", user: req.user });
+  res.render("author_form", { title: "작가 생성", user: req.user });
 };
 
 // 작가 생성 on POST.
@@ -61,16 +61,16 @@ exports.author_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("First name must be specified.")
-    .isAlphanumeric()
-    .withMessage("First name has non-alphanumeric characters."),
+    .withMessage("이름을 넣으셔야 합니다."),
+    // .isAlphanumeric()
+    // .withMessage("First name has non-alphanumeric characters."),
   body("family_name")
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Family name must be specified.")
-    .isAlphanumeric()
-    .withMessage("Family name has non-alphanumeric characters."),
+    .withMessage("성을 넣으셔야 합니다."),
+    // .isAlphanumeric()
+    // .withMessage("Family name has non-alphanumeric characters."),
   body("date_of_birth", "Invalid date of birth")
     .optional({ checkFalsy: true })
     .isISO8601()
@@ -87,7 +87,7 @@ exports.author_create_post = [
     if (!errors.isEmpty()) {
       // 에러가 확인되면 기본값/에러 표시
       res.render("author_form", {
-        title: "Create Author",
+        title: "작가 생성",
         author: req.body,
         errors: errors.array(),
       });

@@ -5,20 +5,20 @@ block content
 
   form(method='POST' action='')
     div.form-group 
-      label(for='first_name') First Name: 
-      input#first_name.form-control(type='text' placeholder='First name (Christian)' 
+      label(for='first_name') 이름: 
+      input#first_name.form-control(type='text' placeholder='이름' 
       name='first_name' required='true' value=(undefined===author ? '' : author.first_name)) 
-      label(for='family_name') Family Name: 
-      input#family_name.form-control(type='text' placeholder='Family name (Surname)' 
+      label(for='family_name') 성: 
+      input#family_name.form-control(type='text' placeholder='성' 
       name='family_name' required='true' value=(undefined===author ? '' : author.family_name))
-      label(for='date_of_birth') Date of birth: 
-      input#date_of_birth.form-control(type='date' placeholder='date_of_birth' 
+      label(for='date_of_birth') 출생일: 
+      input#date_of_birth.form-control(type='date' placeholder='출생일' 
       value=(undefined===author ? '' : author.date_of_birth))
-      label(for='date_of_death') Date of death: 
-      input#date_of_death.form-control(type='date' placeholder='date_of_death' 
+      label(for='date_of_death') 사망일: 
+      input#date_of_death.form-control(type='date' placeholder='사망일' 
       value=(undefined===author ? '' : author.date_of_death))
 
-    button.btn.btn-primary(type='submit') Submit 
+    button.btn.btn-primary(type='submit') 생성 
   if errors 
     ul 
       for error in errors 

@@ -46,7 +46,7 @@ exports.bookinstance_create_get = (req, res, next) => {
     }
     // Successful
     res.render("bookinstance_form", {
-      title: "Create BookInstance",
+      title: "책 객체 생성",
       book_list: books,
       user: req.user
     });
@@ -88,7 +88,7 @@ exports.bookinstance_create_post = [
         }
         // Successful.
         res.render("bookinstance_form", {
-          title: "Create BookInstance",
+          title: "책 객체 생성",
           book_list: books,
           selected_book: bookinstance.book._id,
           errors: errors.array(),

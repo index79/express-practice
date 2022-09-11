@@ -40,7 +40,7 @@ exports.book_list = function(req, res, next) {
     .exec(function (err, list_books) {
       if (err) { return next(err); }
       //Successful.
-      res.render('book_list', { title: 'Book List', book_list: list_books, user: req.user});
+      res.render('book_list', { title: '책 리스트', book_list: list_books, user: req.user});
     });
 
 };
@@ -97,7 +97,7 @@ exports.book_create_get = (req, res, next) => {
         return next(err);
       }
       res.render("book_form", {
-        title: "Create Book",
+        title: "책 생성",
         authors: results.authors,
         genres: results.genres,
         user: req.user
@@ -169,7 +169,7 @@ exports.book_create_post = [
             }
           }
           res.render("book_form", {
-            title: "Create Book",
+            title: "책 생성",
             authors: results.authors,
             genres: results.genres,
             book,

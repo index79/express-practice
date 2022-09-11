@@ -5,11 +5,11 @@ block content
 
   form(method='POST' action='')
     div.form-group
-      label(for='title') Title:
-      input#title.form-control(type='text', placeholder='Name of book' name='title' required='true' value=(undefined===book ? '' : book.title) )
+      label(for='title') 제목:
+      input#title.form-control(type='text', placeholder='책 제목' name='title' required='true' value=(undefined===book ? '' : book.title) )
     div.form-group
-      label(for='author') Author:
-      select#author.form-control(type='select' placeholder='Select author' name='author' required='true' )
+      label(for='author') 작가:
+      select#author.form-control(type='select' placeholder='작가 선택' name='author' required='true' )
         - authors.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         for author in authors
           if book
@@ -24,13 +24,13 @@ block content
           else
             option(value=author._id) #{author.name}
     div.form-group
-      label(for='summary') Summary:
-      textarea#summary.form-control(type='textarea', placeholder='Summary' name='summary' required='true') #{undefined===book ? '' : book.summary}
+      label(for='summary') 요약:
+      textarea#summary.form-control(type='textarea', placeholder='요약' name='summary' required='true') #{undefined===book ? '' : book.summary}
     div.form-group
       label(for='isbn') ISBN:
       input#isbn.form-control(type='text', placeholder='ISBN13' name='isbn' value=(undefined===book ? '' : book.isbn) required='true')
     div.form-group
-      label Genre:
+      label 장르:
       div
         for genre in genres
           div(style='display: inline; padding-right:10px;')
