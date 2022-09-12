@@ -43,6 +43,7 @@ Node.js의 Express를 배우기 위하여 시작한 프로젝트입니다. Mongo
 - Express
 - Express Session
 - Mongoose
+- Sequelize (under development)
 - Morgan
 - Passport
 - OAuth 2.0
